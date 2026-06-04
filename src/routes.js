@@ -7,13 +7,13 @@ const routers = Router()
 //ROTAS OFICINAS
 routers.get("/oficina", async (req, res) => {
      try {
-        const listaDeOficinas = await listarOficinasService(res)
-        res.status(200).json(listaDeOficinas)
+         const listaDeOficinas = await listarOficinasService(res)
+         res.status(200).json(listaDeOficinas)
     } catch(error) {
         return res.status(404).json({mensage: "erro ao buscar uma oficina", error})
     } 
 })
-
+/* 
 routers.get("/oficina/:id", )
 
 routers.post("/oficina", )
@@ -48,5 +48,5 @@ routers.put("/manutencao/:id", )
 
 routers.delete("/manutencao/:id", )
 
-
+ */
 export default routers;
