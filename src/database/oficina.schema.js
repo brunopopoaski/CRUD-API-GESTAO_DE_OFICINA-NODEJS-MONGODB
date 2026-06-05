@@ -2,24 +2,25 @@ import mongoose from "mongoose";
 
 const oficinaSchema = {
 
-    name: {
+    nome: {
         type: String,
         required: true,
       },
   
-      address: {
+      endereco: {
         type: String,
         required: true,
       },
   
-      specialties: {
+      especialidades: {
         type: [String],
         required: true,
       },
   
-      vehicles: [
+      veiculos: [
         {
           type: mongoose.Schema.Types.ObjectId,
+          required: false,
         },
       ],
     }

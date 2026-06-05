@@ -1,5 +1,5 @@
 import { Router } from "express";
-import listarOficinasService from "./service/oficina.service.js"
+import {listarOficinasService, cadastrarOficinaService} from "./service/oficina.service.js"
 
 const routers = Router()
 
@@ -13,10 +13,24 @@ routers.get("/oficina", async (req, res) => {
         return res.status(404).json({mensage: "erro ao buscar uma oficina", error})
     } 
 })
+
+
+routers.post("/oficina", async (req, res) => {
+    try {
+        const oficina = req.body
+        console.log(oficina);
+        const novaOficina = await cadastrarOficinaService(oficina)
+        res.status(201).json(novaOficina)
+        console.log(novaOficina);
+    } catch (error) {
+        res.status(404).json({ message: "Erro ao cadastrar a oficina", error })
+    }
+} )
+
+
 /* 
 routers.get("/oficina/:id", )
 
-routers.post("/oficina", )
 
 routers.put("/oficina/:id", )
 
@@ -49,4 +63,5 @@ routers.put("/manutencao/:id", )
 routers.delete("/manutencao/:id", )
 
  */
+
 export default routers;
