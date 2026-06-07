@@ -13,3 +13,8 @@ export async function atualizarOficina(id, body) {
             { new: true }
         )
 }
+
+export async function deletarOficina(id) {
+        const oficinaDeletada = await MOficina.findByIdAndDelete(id)
+        return await oficinaDeletada
+}
