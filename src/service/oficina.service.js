@@ -1,7 +1,7 @@
-import listarOficinas from "../repository/read/read.oficina.repository.js"
-import { cadastrarOficina, atualizarOficina, deletarOficina } from "../repository/write/write.oficina.repository.js"
+import {listarOficinas, listarOficinaPorId} from "../repository/read/read.oficina.repository.js"
+import { cadastrarOficina, atualizarOficina, deletarOficina} from "../repository/write/write.oficina.repository.js"
 
-export async function listarOficinasService(res) {
+export async function listarOficinasService() {
     try {
         const listaDeOficinas = await listarOficinas()
         return await listaDeOficinas
@@ -16,7 +16,7 @@ export async function listarCarrosPorOficinaService(id) {
             throw new Error("ID da oficina é necessário para listar os carros")
         }
         const oficina = await listarOficinaPorId(id)
-        const listaDeVeiculos = oficina.veiculos
+        const listaDeVeiculos = await oficina.veiculos
         return await listaDeVeiculos
     } catch (error) {
         throw new Error("Erro ao listar os carros da oficina: " + error.message)

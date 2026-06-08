@@ -12,6 +12,7 @@ export async function atualizarOficina(id, body) {
          body,
             { new: true }
         )
+        return oficinaAtualizada
 }
 
 export async function deletarOficina(id) {

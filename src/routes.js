@@ -1,16 +1,18 @@
 import { Router } from "express";
 import { listarOficinasService, listarCarrosPorOficinaService, cadastrarOficinaService, atualizarOficinaService, deletarOficinaService } from "./service/oficina.service.js"
+import {listarVeiculosService, listarManutencoesService, cadastrarVeiculoService, atualizarVeiculoService, deletarVeiculoService} from "../src/service/veiculos.service.js"
+
+
 
 const routers = Router()
-
 
 //ROTAS OFICINAS
 routers.get("/oficina", async (req, res) => {
     try {
-        const listaDeOficinas = await listarOficinasService(res)
+        const listaDeOficinas = await listarOficinasService()
         res.status(200).json(listaDeOficinas)
     } catch (error) {
-        return res.status(404).json({ mensage: "erro ao buscar uma oficina", error })
+        return res.status(404).json({ mensage: "erro ao buscar as oficinas cadastradas", error })
     }
 })
 
@@ -57,20 +59,63 @@ routers.delete("/oficina/:id", async (req, res) => {
 })
 
 
-/* 
+
 
 //ROTAS VEICULOS
-routers.get("/veiculo", )
+routers.get("/veiculo", async (req, res) => {
+    try {
+        const listaDeVeiculos = await listarVeiculosService()
+        res.status(200).json(listaDeVeiculos)
+    } catch (error) {
+        res.status(404).json({ message: "erro ao buscar os veiculos cadastrados", error })
+    }
+})
 
-routers.get("/veiculo/:id", )
+routers.get("/veiculo/:id", async (req, res) => {
+    try {
+        const id = req.params.id
+        const listaDeManutencoes = listarManutencoesService(id)
+        res.status(200).json(listaDeManutencoes)
+    } catch (error) {
+        res.status(404).json({ message: "erro ao buscar as manutenções do veiculo informado", error })
+    }
+})
 
-routers.post("/veiculo", )
+routers.post("/veiculo", async (req, res) => {
+    try {
+        const novoVeiculo = req.body
+        const veiculoCriado = await cadastrarVeiculoService(novoVeiculo)
+        res.status(201).json(veiculoCriado)
+    } catch (error) {
+        return res.status(404).json({ mensage: "erro ao cadastrar um veiculo", error })
+    }
+})
 
-routers.put("/veiculo/:id", )
+routers.put("/veiculo/:id", async (req, res) => {
+    try {
+        const id = req.params.id
+        const veiculoAtualizado = req.body
+        const veiculoAtt = await atualizarVeiculoService(id, veiculoAtualizado)
+        res.status(201).json(veiculoAtt)
+    } catch (error) {
+        res.status(404).json({ message: "Erro ao atualizar um veiculo", error })
+    }
+})
 
-routers.delete("/veiculo/:id", )
+routers.delete("/veiculo/:id", async (req, res) => {
+    try {
+        const id = req.params.id
+        const veiculoDeletado = await deletarVeiculoService(id)
+        res.status(200).json(veiculoDeletado) 
+    } catch (error) {
+        
+    }
+})
 
 
+
+
+/* 
 
 //ROTAS MANUTENCOES
 routers.get("/manutencao", )
