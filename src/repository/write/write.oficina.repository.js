@@ -20,8 +20,7 @@ export async function atualizarOficinaVeiculo(id, body) {
         {_id: id},
         {$push: {veiculos: body}},
         )
-        console.log(oficinaAtualizada);
-        return oficinaAtualizada//pareiiiii aqui e deu boa e chega por hoje
+        return oficinaAtualizada
 }
 
 export async function deletarOficina(id) {
