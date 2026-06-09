@@ -14,6 +14,14 @@ export async function atualizarVeiculo(id, body){
     return veiculoAtualizado
 }
 
+export async function atualizarManutencaoVeiculo(id, body) {
+    const veiculoAtualizado = await MVeiculo.updateOne(
+        {_id: ObjectId(id)},
+        {$push: {manutencoesRealizadas: body}},
+        )
+        return veiculoAtualizado
+}
+
 export async function deletarVeiculo(id){
     const veiculoDeletado = await MVeiculo.findByIdAndDelete(id)
     return veiculoDeletado

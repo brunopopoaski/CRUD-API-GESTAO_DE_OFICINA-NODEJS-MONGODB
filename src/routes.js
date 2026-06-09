@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { listarOficinasService, listarCarrosPorOficinaService, cadastrarOficinaService, atualizarOficinaService, deletarOficinaService } from "./service/oficina.service.js"
 import {listarVeiculosService, listarManutencoesService, cadastrarVeiculoService, atualizarVeiculoService, deletarVeiculoService} from "../src/service/veiculos.service.js"
-
+import cadastrarNovaManutencaoService from "../src/service/manutencoes.service.js"
 
 
 const routers = Router()
@@ -108,10 +108,24 @@ routers.delete("/veiculo/:id", async (req, res) => {
         const veiculoDeletado = await deletarVeiculoService(id)
         res.status(200).json(veiculoDeletado) 
     } catch (error) {
-        
+        res.status(404).json({ message: "Erro ao deletar o veiculo", error })
     }
 })
 
+
+
+
+
+
+routers.post("/manutencao", async (req, res) => {
+    try {
+        const novaManutencao = req.body
+        const manutencaoCriada = await cadastrarNovaManutencaoService(novaManutencao)
+        res.status(201).json(manutencaoCriada)
+    } catch (error) {
+        res.status(404).json({ message: "Erro ao cadastrar uma manutenção", error })
+    }
+})
 
 
 
@@ -122,7 +136,6 @@ routers.get("/manutencao", )
 
 routers.get("/manutencao/:id", )
 
-routers.post("/manutencao", )
 
 routers.put("/manutencao/:id", )
 

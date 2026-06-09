@@ -15,6 +15,15 @@ export async function atualizarOficina(id, body) {
         return oficinaAtualizada
 }
 
+export async function atualizarOficinaVeiculo(id, body) {
+    const oficinaAtualizada = await MOficina.updateOne(
+        {_id: id},
+        {$push: {veiculos: body}},
+        )
+        console.log(oficinaAtualizada);
+        return oficinaAtualizada//pareiiiii aqui e deu boa e chega por hoje
+}
+
 export async function deletarOficina(id) {
         const oficinaDeletada = await MOficina.findByIdAndDelete(id)
         return await oficinaDeletada
