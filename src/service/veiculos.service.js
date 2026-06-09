@@ -6,7 +6,7 @@ export async function listarVeiculosService() {
     return await listaDeVeiculos
 }
 
-export async function listarManutencoesService(id) {
+export async function listarManutencoesPorVeiculoService(id) {
     try {
         if (!id) {
             throw new Error("Id de veiculo informado inválido:" + error.message)

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { listarOficinasService, listarCarrosPorOficinaService, cadastrarOficinaService, atualizarOficinaService, deletarOficinaService } from "./service/oficina.service.js"
-import {listarVeiculosService, listarManutencoesService, cadastrarVeiculoService, atualizarVeiculoService, deletarVeiculoService} from "../src/service/veiculos.service.js"
-import cadastrarNovaManutencaoService from "../src/service/manutencoes.service.js"
+import { listarVeiculosService, listarManutencoesPorVeiculoService, cadastrarVeiculoService, atualizarVeiculoService, deletarVeiculoService } from "../src/service/veiculos.service.js"
+import { cadastrarNovaManutencaoService, listarManutencoesService, atualizarManutencaoService, deletarManutencaoService, listaDeManutencoesPorOficinaService, listaDeManutencoesPorVeiculoService } from "../src/service/manutencoes.service.js"
 
 
 const routers = Router()
@@ -49,11 +49,11 @@ routers.put("/oficina/:id", async (req, res) => {
 )
 
 routers.delete("/oficina/:id", async (req, res) => {
-    try{
+    try {
         const id = req.params.id
         const oficinaDeletada = await deletarOficinaService(id)
         res.status(200).json(oficinaDeletada)
-    }catch (error) {
+    } catch (error) {
         res.status(404).json({ message: "Erro ao deletar a oficina", error })
     }
 })
@@ -74,8 +74,8 @@ routers.get("/veiculo", async (req, res) => {
 routers.get("/veiculo/:id", async (req, res) => {
     try {
         const id = req.params.id
-        const listaDeManutencoes = listarManutencoesService(id)
-        res.status(200).json(listaDeManutencoes)
+        const listaDeManutencoes = await listarManutencoesPorVeiculoService(id)
+        res.status(200).json(listaDeManutencoes)//terminar para trazer a manutencao feita
     } catch (error) {
         res.status(404).json({ message: "erro ao buscar as manutenções do veiculo informado", error })
     }
@@ -106,16 +106,22 @@ routers.delete("/veiculo/:id", async (req, res) => {
     try {
         const id = req.params.id
         const veiculoDeletado = await deletarVeiculoService(id)
-        res.status(200).json(veiculoDeletado) 
+        res.status(200).json(veiculoDeletado)
     } catch (error) {
         res.status(404).json({ message: "Erro ao deletar o veiculo", error })
     }
 })
 
 
-
-
-
+//ROTAS MANUTENCOES
+routers.get("/manutencao", async (req, res) => {
+    try {
+        const listaDeManutencoes = await listarManutencoesService()
+        res.status(200).json(listaDeManutencoes)
+    } catch (error) {
+        res.status(404).json({ message: "Erro ao listar as manutenções", error })
+    }
+})
 
 routers.post("/manutencao", async (req, res) => {
     try {
@@ -127,20 +133,45 @@ routers.post("/manutencao", async (req, res) => {
     }
 })
 
+routers.put("/manutencao/:id", async (req, res) => {
+    try {
+        const id = req.params.id
+        const manutencaoAtualizada = req.body
+        const manutencaoAtt = await atualizarManutencaoService(id, manutencaoAtualizada)
+        res.status(201).json(manutencaoAtt)
+    } catch (error) {
+        res.status(404).json({ message: "Erro ao atualizar uma manutenção", error })
+    }
+})
 
+routers.delete("/manutencao/:id", async (req, res) => {
+    try {
+        const id = req.params.id
+        const manutencaoDeletada = await deletarManutencaoService(id)
+        res.status(200).json(manutencaoDeletada)
+    } catch (error) {
+        res.status(404).json({ message: "Erro ao excluir uma manutenção", error })
+    }
+})
 
-/* 
+routers.get("/manutencao/oficina/:id", async (req, res) => {
+    try {
+        const idOficina = req.params.id
+        const listaDeManutencoesPorOficina = await listaDeManutencoesPorOficinaService(idOficina)
+        res.status(200).json(listaDeManutencoesPorOficina) 
+    } catch (error) {
+        res.status(404).json({ message: "Erro ao buscar uma manutenção por oficina", error })
+    }
+})
 
-//ROTAS MANUTENCOES
-routers.get("/manutencao", )
-
-routers.get("/manutencao/:id", )
-
-
-routers.put("/manutencao/:id", )
-
-routers.delete("/manutencao/:id", )
-
- */
+routers.get("/manutencao/veiculo/:id", async (req, res) => {
+    try {
+        const idVeiculo = req.params.id
+        const listaDeManutencoesPorVeiculo = await listaDeManutencoesPorVeiculoService(idVeiculo)
+        res.status(200).json(listaDeManutencoesPorVeiculo) 
+    } catch (error) {
+        res.status(404).json({ message: "Erro ao buscar uma manutenção por Veiculo", error })
+    }
+})
 
 export default routers;

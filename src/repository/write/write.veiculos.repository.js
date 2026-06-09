@@ -16,7 +16,7 @@ export async function atualizarVeiculo(id, body){
 
 export async function atualizarManutencaoVeiculo(id, body) {
     const veiculoAtualizado = await MVeiculo.updateOne(
-        {_id: ObjectId(id)},
+        {_id: id},
         {$push: {manutencoesRealizadas: body}},
         )
         return veiculoAtualizado
