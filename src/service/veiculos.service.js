@@ -1,4 +1,4 @@
-import { listarVeiculos, listarVeiculoPorId } from "../repository/read/read.veiculos.repository.js"
+import { listarVeiculos, listarVeiculoPorId, listarVeiculoPorPlaca } from "../repository/read/read.veiculos.repository.js"
 import {cadastrarVeiculo, atualizarVeiculo, deletarVeiculo} from "../repository/write/write.veiculos.repository.js"
 
 export async function listarVeiculosService() {
@@ -12,7 +12,7 @@ export async function listarManutencoesPorVeiculoService(id) {
             throw new Error("Id de veiculo informado inválido:" + error.message)
         }
         const veiculo = await listarVeiculoPorId(id)
-        const listaDeManutencoes = await veiculo.manutencoesRealizadas
+        const listaDeManutencoes = await veiculo.idManutencoesRealizadas
         return await listaDeManutencoes
 
     } catch (error) {
@@ -22,10 +22,16 @@ export async function listarManutencoesPorVeiculoService(id) {
 
 export async function cadastrarVeiculoService(body) {
     try {
-        if (!body.placa || !body.modelo || !body.ano || !body.proprietario || !body.manutencoesRealizadas) {
+        if (!body.placa || !body.modelo || !body.ano || !body.proprietario) {
             throw new Error("Digite todos os parametros necessarios para cadastrar um veiculo" + error.message)
         }
-        const novaOficina = await cadastrarVeiculo(body)
+        //verifica se a placa do veiculo já esta cadastrada
+        const placaExiste = await listarVeiculoPorPlaca(body.placa)
+        if (placaExiste){
+            throw new Error("a placa informada já está cadastrada no sistema" + error.message)
+        }
+
+        const novaOficina = await cadastrarVeiculo(body.placa, body.modelo, body.ano, body.proprietario)
         return await novaOficina
     } catch (error) {
         throw new Error("Erro ao cadastrar um veiculo" + error.message)
@@ -34,10 +40,14 @@ export async function cadastrarVeiculoService(body) {
 
 export async function atualizarVeiculoService(id, body) {
     try {
-        if (!body.placa || !body.modelo || !body.ano || !body.proprietario || !body.manutencoesRealizadas) {
+        if (!body.placa || !body.modelo || !body.ano || !body.proprietario) {
             throw new Error("Digite todos os parametros necessarios para atualizar um veiculo" + error.message)
         }
-        const veiculoAtualizado = await atualizarVeiculo(id, body)
+        const placaExiste = await listarVeiculoPorPlaca(body.placa)
+        if (placaExiste){
+            throw new Error("a placa informada já está cadastrada no sistema" + error.message)
+        }
+        const veiculoAtualizado = await atualizarVeiculo(id, body.placa, body.modelo, body.ano, body.proprietario)
         return veiculoAtualizado
     } catch (error) {
 

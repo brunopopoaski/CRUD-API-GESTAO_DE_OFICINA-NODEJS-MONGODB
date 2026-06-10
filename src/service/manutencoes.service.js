@@ -1,22 +1,33 @@
 import { cadastrarManutencao, atualizarManutencao, deletarManutencao } from "../repository/write/write.manutencao.repository.js"
-import {listarManutencoes, listaDeManutencoesPorOficina, listaDeManutencoesPorVeiculo} from "../repository/read/read.manutencoes.repository.js"
+import { listarManutencoes, listaDeManutencoesPorOficina, listaDeManutencoesPorVeiculo } from "../repository/read/read.manutencoes.repository.js"
 import { atualizarOficinaVeiculo } from "../repository/write/write.oficina.repository.js"
 import { atualizarManutencaoVeiculo } from "../repository/write/write.veiculos.repository.js"
+import { listarOficinaPorId } from "../repository/read/read.oficina.repository.js"
+import { listarVeiculoPorId } from "../repository/read/read.veiculos.repository.js"
 
 export async function cadastrarNovaManutencaoService(body) {
     try {
-        if (!body.oficina || !body.veiculo || !body.servicos || !body.data || !body.valorTotal) {
+        if (!body.idOficina || !body.idVeiculo || !body.servicos || !body.data || !body.valorTotal) {
             throw new Error("Digite todas as informações necessarias para cadastrar uma manutenção" + error.message)
         }
+        //validacoes se oficina e veiculo inputados existem.
+        const oficinaExiste = await listarOficinaPorId(body.idOficina)
+        if (!oficinaExiste) {
+            throw new Error("Digite uma oficina existente para cadastrar uma manutenção" + error.message)
+        }
+        const veiculoExiste = await listarVeiculoPorId(body.idVeiculo)
+        if (!veiculoExiste) {
+            throw new Error("Digite um veiculo existente para cadastrar uma manutenção" + error.message)
+        }
 
-        const novaManutencao = await cadastrarManutencao(body)
+        const novaManutencao = await cadastrarManutencao(body.idOficina, body.idVeiculo, body.servicos, body.data, body.valorTotal)
         //
-        const idOficina = body.oficina
-        const idVeiculoParaOficina = await novaManutencao.veiculo.toString()
+        const idOficina = body.idOficina
+        const idVeiculoParaOficina = await novaManutencao.idVeiculo
         const atualizandoArrayVeiculos = await atualizarOficinaVeiculo(idOficina, idVeiculoParaOficina)
         //
-        const idVeiculo = body.veiculo
-        const idManutencaoParaVeiculo = await novaManutencao._id.toString()
+        const idVeiculo = body.idVeiculo
+        const idManutencaoParaVeiculo = await novaManutencao._id
         const atualizandoArrayManutencoesRealizadas = await atualizarManutencaoVeiculo(idVeiculo, idManutencaoParaVeiculo)
         //
         return await novaManutencao
@@ -36,10 +47,19 @@ export async function listarManutencoesService() {
 
 export async function atualizarManutencaoService(id, body) {
     try {
-        if (!id || !body.oficina || !body.veiculo || !body.servicos || !body.data || !body.valorTotal) {
+        if (!id || !body.idOficina || !body.idVeiculo || !body.servicos || !body.data || !body.valorTotal) {
             throw new Error("Digite todas as informações necessarias para atualizar uma manutenção" + error.message)
         }
-        const manutencaoAtualizada = await atualizarManutencao(id, body)
+        //validacoes se oficina e veiculo inputados existem.
+        const oficinaExiste = await listarOficinaPorId(body.idOficina)
+        if (oficinaExiste) {
+            throw new Error("Digite uma oficina existente para cadastrar uma manutenção" + error.message)
+        }
+        const veiculoExiste = await listarVeiculoPorId(body.idVeiculo)
+        if (veiculoExiste) {
+            throw new Error("Digite um veiculo existente para cadastrar uma manutenção" + error.message)
+        }
+        const manutencaoAtualizada = await atualizarManutencao(id, body.idOficina, body.idVeiculo, body.servicos, body.data, body.valorTotal)
         return await manutencaoAtualizada
     } catch (error) {
         throw new Error("Erro ao atualizar a uma manutenção" + error.message)
@@ -61,7 +81,7 @@ export async function deletarManutencaoService(id) {
 export async function listaDeManutencoesPorOficinaService(id) {
     try {
         if (!id) {
-        throw new Error("Digite um id para listar as manutenções de uma oficina" + error.message)
+            throw new Error("Digite um id para listar as manutenções de uma oficina" + error.message)
         }
         const listaDeManutencoes = await listaDeManutencoesPorOficina(id)
         return await listaDeManutencoes
@@ -73,7 +93,7 @@ export async function listaDeManutencoesPorOficinaService(id) {
 export async function listaDeManutencoesPorVeiculoService(id) {
     try {
         if (!id) {
-        throw new Error("Digite um id para listar as manutenções de uma veiculo" + error.message)
+            throw new Error("Digite um id para listar as manutenções de uma veiculo" + error.message)
         }
         const listaDeManutencoes = await listaDeManutencoesPorVeiculo(id)
         return await listaDeManutencoes

@@ -1,14 +1,26 @@
 import MVeiculo from "../../database/veiculos.schema.js"
 
-export async function cadastrarVeiculo(body){
-    const novoVeiculo = await MVeiculo.insertOne(body)
+export async function cadastrarVeiculo(placa, modelo, ano, proprietario){
+    const novoVeiculo = await MVeiculo.insertOne(
+        {
+            placa: placa,
+            modelo: modelo,
+            ano: ano,
+            proprietario: proprietario
+        }
+    )
     return novoVeiculo
 }
 
-export async function atualizarVeiculo(id, body){
+export async function atualizarVeiculo(id, placa, modelo, ano, proprietario){
     const veiculoAtualizado = await MVeiculo.findByIdAndUpdate(
         id,
-        body,
+            {
+                placa: placa,
+                modelo: modelo,
+                ano: ano,
+                proprietario: proprietario
+            },
         {new: true}
     )
     return veiculoAtualizado
@@ -17,7 +29,7 @@ export async function atualizarVeiculo(id, body){
 export async function atualizarManutencaoVeiculo(id, body) {
     const veiculoAtualizado = await MVeiculo.updateOne(
         {_id: id},
-        {$push: {manutencoesRealizadas: body}},
+        {$push: {idManutencoesRealizadas: body}},
         )
         return veiculoAtualizado
 }

@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const veiculoSchema = {
     placa: {
         type: String,
+        unique: true,
         require: true
     },
     modelo: {
@@ -17,7 +18,7 @@ const veiculoSchema = {
         type: String,
         require: true
     },
-    manutencoesRealizadas: [
+    idManutencoesRealizadas: [
         {
           type: mongoose.Schema.Types.ObjectId,
           required: false,
