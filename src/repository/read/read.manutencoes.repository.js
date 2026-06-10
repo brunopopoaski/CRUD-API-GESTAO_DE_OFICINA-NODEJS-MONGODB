@@ -6,11 +6,11 @@ export async function listarManutencoes(){
 }
 
 export async function listaDeManutencoesPorOficina(id){
-    const listaDeManutencoesPorOficina = await MManutencao.find({ oficina: id })
+    const listaDeManutencoesPorOficina = await MManutencao.find({ idOficina: id })
     return listaDeManutencoesPorOficina
 }
 
 export async function listaDeManutencoesPorVeiculo(id){
-    const listaDeManutencoesPorVeiculo = await MManutencao.find({ veiculo: id })
+    const listaDeManutencoesPorVeiculo = await MManutencao.find({ idVeiculo: id })
     return listaDeManutencoesPorVeiculo
 }

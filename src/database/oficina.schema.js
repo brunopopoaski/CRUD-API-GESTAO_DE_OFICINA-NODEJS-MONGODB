@@ -17,7 +17,7 @@ const oficinaSchema = {
         required: true,
       },
   
-      veiculos: [
+      idVeiculos: [
         {
           type: mongoose.Schema.Types.ObjectId,
           required: false,

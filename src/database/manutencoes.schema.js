@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
 const manutencaoSchema = {
-    oficina: {
+    idOficina: {
         type: mongoose.Schema.Types.ObjectId,
         require: true
     },
-    veiculo: {
+    idVeiculo: {
         type: mongoose.Schema.Types.ObjectId,
         require: true
     },

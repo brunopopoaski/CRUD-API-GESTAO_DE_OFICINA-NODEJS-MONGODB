@@ -12,7 +12,7 @@ routers.get("/oficina", async (req, res) => {
         const listaDeOficinas = await listarOficinasService()
         res.status(200).json(listaDeOficinas)
     } catch (error) {
-        return res.status(404).json({ mensage: "erro ao buscar as oficinas cadastradas", error })
+        return res.status(404).json({ mensage: "erro ao buscar as oficinas cadastradas", error: error.message })
     }
 })
 
@@ -22,7 +22,7 @@ routers.get("/oficina/:id", async (req, res) => {
         const listaDeVeiculos = await listarCarrosPorOficinaService(id)
         res.status(200).json(listaDeVeiculos)
     } catch (error) {
-        return res.status(404).json({ mensage: "erro ao buscar os carros da oficina", error })
+        return res.status(404).json({ mensage: "erro ao buscar os carros da oficina", error: error.message })
     }
 })
 
@@ -32,7 +32,7 @@ routers.post("/oficina", async (req, res) => {
         const novaOficina = await cadastrarOficinaService(oficina)
         res.status(201).json(novaOficina)
     } catch (error) {
-        res.status(404).json({ message: "Erro ao cadastrar a oficina", error })
+        res.status(404).json({ message: "Erro ao cadastrar a oficina", error: error.message })//dessa forma correta passar o erro como um objeto
     }
 })
 
@@ -43,7 +43,7 @@ routers.put("/oficina/:id", async (req, res) => {
         const oficinaAtt = await atualizarOficinaService(id, oficinaAtualizada)
         res.status(201).json(oficinaAtt)
     } catch (error) {
-        res.status(404).json({ message: "Erro ao atualizar a oficina", error })
+        res.status(404).json({ message: "Erro ao atualizar a oficina", error: error.message })
     }
 }
 )
@@ -54,7 +54,7 @@ routers.delete("/oficina/:id", async (req, res) => {
         const oficinaDeletada = await deletarOficinaService(id)
         res.status(200).json(oficinaDeletada)
     } catch (error) {
-        res.status(404).json({ message: "Erro ao deletar a oficina", error })
+        res.status(404).json({ message: "Erro ao deletar a oficina", error: error.message })
     }
 })
 
@@ -67,7 +67,7 @@ routers.get("/veiculo", async (req, res) => {
         const listaDeVeiculos = await listarVeiculosService()
         res.status(200).json(listaDeVeiculos)
     } catch (error) {
-        res.status(404).json({ message: "erro ao buscar os veiculos cadastrados", error })
+        res.status(404).json({ message: "erro ao buscar os veiculos cadastrados", error: error.message })
     }
 })
 
@@ -77,7 +77,7 @@ routers.get("/veiculo/:id", async (req, res) => {
         const listaDeManutencoes = await listarManutencoesPorVeiculoService(id)
         res.status(200).json(listaDeManutencoes)//terminar para trazer a manutencao feita
     } catch (error) {
-        res.status(404).json({ message: "erro ao buscar as manutenções do veiculo informado", error })
+        res.status(404).json({ message: "erro ao buscar as manutenções do veiculo informado", error: error.message })
     }
 })
 
@@ -87,7 +87,7 @@ routers.post("/veiculo", async (req, res) => {
         const veiculoCriado = await cadastrarVeiculoService(novoVeiculo)
         res.status(201).json(veiculoCriado)
     } catch (error) {
-        return res.status(404).json({ mensage: "erro ao cadastrar um veiculo", error })
+        return res.status(404).json({ mensage: "erro ao cadastrar um veiculo", error: error.message })
     }
 })
 
@@ -98,7 +98,7 @@ routers.put("/veiculo/:id", async (req, res) => {
         const veiculoAtt = await atualizarVeiculoService(id, veiculoAtualizado)
         res.status(201).json(veiculoAtt)
     } catch (error) {
-        res.status(404).json({ message: "Erro ao atualizar um veiculo", error })
+        res.status(404).json({ message: "Erro ao atualizar um veiculo", error: error.message })
     }
 })
 
@@ -108,7 +108,7 @@ routers.delete("/veiculo/:id", async (req, res) => {
         const veiculoDeletado = await deletarVeiculoService(id)
         res.status(200).json(veiculoDeletado)
     } catch (error) {
-        res.status(404).json({ message: "Erro ao deletar o veiculo", error })
+        res.status(404).json({ message: "Erro ao deletar o veiculo", error: error.message })
     }
 })
 
@@ -119,7 +119,7 @@ routers.get("/manutencao", async (req, res) => {
         const listaDeManutencoes = await listarManutencoesService()
         res.status(200).json(listaDeManutencoes)
     } catch (error) {
-        res.status(404).json({ message: "Erro ao listar as manutenções", error })
+        res.status(404).json({ message: "Erro ao listar as manutenções", error: error.message })
     }
 })
 
@@ -129,7 +129,7 @@ routers.post("/manutencao", async (req, res) => {
         const manutencaoCriada = await cadastrarNovaManutencaoService(novaManutencao)
         res.status(201).json(manutencaoCriada)
     } catch (error) {
-        res.status(404).json({ message: "Erro ao cadastrar uma manutenção", error })
+        res.status(404).json({ message: "Erro ao cadastrar uma manutenção", error: error.message })
     }
 })
 
@@ -140,7 +140,7 @@ routers.put("/manutencao/:id", async (req, res) => {
         const manutencaoAtt = await atualizarManutencaoService(id, manutencaoAtualizada)
         res.status(201).json(manutencaoAtt)
     } catch (error) {
-        res.status(404).json({ message: "Erro ao atualizar uma manutenção", error })
+        res.status(404).json({ message: "Erro ao atualizar uma manutenção", error: error.message })
     }
 })
 
@@ -150,7 +150,7 @@ routers.delete("/manutencao/:id", async (req, res) => {
         const manutencaoDeletada = await deletarManutencaoService(id)
         res.status(200).json(manutencaoDeletada)
     } catch (error) {
-        res.status(404).json({ message: "Erro ao excluir uma manutenção", error })
+        res.status(404).json({ message: "Erro ao excluir uma manutenção", error: error.message })
     }
 })
 
@@ -160,7 +160,7 @@ routers.get("/manutencao/oficina/:id", async (req, res) => {
         const listaDeManutencoesPorOficina = await listaDeManutencoesPorOficinaService(idOficina)
         res.status(200).json(listaDeManutencoesPorOficina) 
     } catch (error) {
-        res.status(404).json({ message: "Erro ao buscar uma manutenção por oficina", error })
+        res.status(404).json({ message: "Erro ao buscar uma manutenção por oficina", error: error.message })
     }
 })
 
@@ -170,7 +170,7 @@ routers.get("/manutencao/veiculo/:id", async (req, res) => {
         const listaDeManutencoesPorVeiculo = await listaDeManutencoesPorVeiculoService(idVeiculo)
         res.status(200).json(listaDeManutencoesPorVeiculo) 
     } catch (error) {
-        res.status(404).json({ message: "Erro ao buscar uma manutenção por Veiculo", error })
+        res.status(404).json({ message: "Erro ao buscar uma manutenção por Veiculo", error: error.message })
     }
 })
 
